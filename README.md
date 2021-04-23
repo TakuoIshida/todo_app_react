@@ -1,2 +1,6 @@
 # todo_app_react
-React.js / AWS amplify
+↓のAPIにリクエストを送ってサーバー側で登録します。
+https://github.com/TakuoIshida/todo_app_python_api.git
+
+# デプロイ
+AWS amplify
