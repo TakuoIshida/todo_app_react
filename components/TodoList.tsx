@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { get, post } from '@/utils/functions'
-import { TodoListType, TodoType } from '@/types/type'
-
+import { IProps, TodoListType, TodoType } from '@/types/type'
+import { postTodo } from '@/utils/functions'
+import React, { useState } from 'react'
 interface TodoInputEvent extends React.FormEvent<HTMLInputElement> {
   target: HTMLInputElement
 }
@@ -9,23 +8,27 @@ interface TodoTextAreaEvent extends React.FormEvent<HTMLTextAreaElement> {
   target: HTMLTextAreaElement
 }
 
-const API = 'http://localhost:8000/api/todos/'
-const TodoList = () => {
-  const [todos, setTodos] = useState([] as TodoListType)
-  const initialEditTodo = {
-    id: '',
+const TodoList: React.FC<IProps> = (props: IProps) => {
+  const initialEditTodo: TodoType = {
+    todo_id: '',
     title: '',
     content: '',
+    isDeleted: false,
   }
+  const [todos, setTodos] = useState([] as TodoListType)
+  console.log(props)
+
   const [editTodo, setEditTodo] = useState(initialEditTodo)
-  useEffect(() => {
-    //   TODO try catch
-    async function fetchTodoAPI() {
-      const todoJson: TodoListType = await get(API)
-      setTodos(todoJson)
-    }
-    fetchTodoAPI()
-  }, [])
+  // useEffect(() => {
+  //   //   TODO try catch
+  //   async function fetchTodos() {
+  //     const getTodos: TodoListType = await get(
+  //       process.env.NEXT_PUBLIC_BASE_API + '/todos',
+  //     )
+  //     setTodos(getTodos)
+  //   }
+  //   fetchTodos()
+  // }, [])
   const handleInputChange = (event: TodoInputEvent) => {
     const name = event.target.name
     const value = event.target.value
@@ -36,16 +39,20 @@ const TodoList = () => {
     const value = event.target.value
     setEditTodo({ ...editTodo, [name]: value })
   }
-  const createNewTodo = () => {
-    //   TODO try catch
-    async function fetchCreateTodo(editTodo: TodoType) {
-      const todoJson = await post(API, editTodo)
+  const putTodo = async (editTodo: TodoType) => {
+    try {
+      const todoJson = await postTodo(
+        process.env.NEXT_PUBLIC_BASE_API + '/todos',
+        editTodo,
+      )
       console.log(todoJson)
 
       setTodos([todoJson, ...todos])
-      setEditTodo({ id: '', title: '', content: '' })
+      setEditTodo(initialEditTodo)
+    } catch (e) {
+      console.log(e)
+      return
     }
-    fetchCreateTodo(editTodo)
   }
   return (
     <div>
@@ -72,16 +79,19 @@ const TodoList = () => {
         />
         <br />
       </div>
-      <button onClick={() => createNewTodo()} className="btn btn-primary">
-        新規作成
+      <button onClick={() => putTodo(editTodo)} className="btn btn-primary">
+        新規作成・更新
       </button>
-      <ul>
-        {todos.map(todo => {
-          ;<li key={todo.id}>
-            {todo.title}: {todo.content}
-          </li>
-        })}
-      </ul>
+      {props.todoList.map((todo: TodoType) => {
+        return (
+          <ul key={todo.todo_id}>
+            {/* title, content, flg, 編集, 削除, 感情 */}
+            <li>
+              {todo.title}: {todo.content}
+            </li>
+          </ul>
+        )
+      })}
     </div>
   )
 }
