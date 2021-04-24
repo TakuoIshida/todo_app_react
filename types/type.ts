@@ -16,3 +16,12 @@ export type TodoListType = TodoType[]
 export interface IProps {
   todoList: TodoListType
 }
+
+export interface ITodoInputEvent extends React.FormEvent<HTMLInputElement> {
+  target: HTMLInputElement
+}
+
+export interface ITodoTextAreaEvent
+  extends React.FormEvent<HTMLTextAreaElement> {
+  target: HTMLTextAreaElement
+}

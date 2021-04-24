@@ -1,12 +1,13 @@
-import { IProps, TodoListType, TodoType } from '@/types/type'
+import {
+  IProps,
+  TodoListType,
+  TodoType,
+  ITodoTextAreaEvent,
+  ITodoInputEvent,
+} from '@/types/type'
 import { postTodo } from '@/utils/functions'
 import React, { useState } from 'react'
-interface TodoInputEvent extends React.FormEvent<HTMLInputElement> {
-  target: HTMLInputElement
-}
-interface TodoTextAreaEvent extends React.FormEvent<HTMLTextAreaElement> {
-  target: HTMLTextAreaElement
-}
+import Link from 'next/link'
 
 const TodoList: React.FC<IProps> = (props: IProps) => {
   const initialEditTodo: TodoType = {
@@ -19,22 +20,13 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
   console.log(props)
 
   const [editTodo, setEditTodo] = useState(initialEditTodo)
-  // useEffect(() => {
-  //   //   TODO try catch
-  //   async function fetchTodos() {
-  //     const getTodos: TodoListType = await get(
-  //       process.env.NEXT_PUBLIC_BASE_API + '/todos',
-  //     )
-  //     setTodos(getTodos)
-  //   }
-  //   fetchTodos()
-  // }, [])
-  const handleInputChange = (event: TodoInputEvent) => {
+
+  const handleInputChange = (event: ITodoInputEvent) => {
     const name = event.target.name
     const value = event.target.value
     setEditTodo({ ...editTodo, [name]: value })
   }
-  const handleTextAreaChange = (event: TodoTextAreaEvent) => {
+  const handleTextAreaChange = (event: ITodoTextAreaEvent) => {
     const name = event.target.name
     const value = event.target.value
     setEditTodo({ ...editTodo, [name]: value })
