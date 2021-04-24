@@ -25,3 +25,7 @@ export interface ITodoTextAreaEvent
   extends React.FormEvent<HTMLTextAreaElement> {
   target: HTMLTextAreaElement
 }
+
+export interface ITodoCheckBoxEvent {
+  target: HTMLInputElement
+}
