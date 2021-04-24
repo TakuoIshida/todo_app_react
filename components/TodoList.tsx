@@ -10,7 +10,7 @@ interface TodoTextAreaEvent extends React.FormEvent<HTMLTextAreaElement> {
 
 const TodoList: React.FC<IProps> = (props: IProps) => {
   const initialEditTodo: TodoType = {
-    todo_id: '',
+    todoId: '',
     title: '',
     content: '',
     isDeleted: false,
@@ -84,12 +84,12 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
       </button>
       {props.todoList.map((todo: TodoType) => {
         return (
-          <ul key={todo.todo_id}>
+          <ol key={todo.todoId}>
             {/* title, content, flg, 編集, 削除, 感情 */}
             <li>
               {todo.title}: {todo.content}
             </li>
-          </ul>
+          </ol>
         )
       })}
     </div>

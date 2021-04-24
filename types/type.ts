@@ -1,5 +1,5 @@
 export type TodoType = {
-  todo_id: string
+  todoId: string
   title: string
   content: string
   isDeleted: boolean
