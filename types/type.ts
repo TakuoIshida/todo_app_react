@@ -1,5 +1,5 @@
 export type TodoType = {
-  todo_id: string
+  todoId: string
   title: string
   content: string
   isDeleted: boolean
@@ -15,4 +15,17 @@ export type TodoListType = TodoType[]
 
 export interface IProps {
   todoList: TodoListType
+}
+
+export interface ITodoInputEvent extends React.FormEvent<HTMLInputElement> {
+  target: HTMLInputElement
+}
+
+export interface ITodoTextAreaEvent
+  extends React.FormEvent<HTMLTextAreaElement> {
+  target: HTMLTextAreaElement
+}
+
+export interface ITodoCheckBoxEvent {
+  target: HTMLInputElement
 }

@@ -1,44 +1,46 @@
-import { IProps, TodoListType, TodoType } from '@/types/type'
+import {
+  IProps,
+  TodoListType,
+  TodoType,
+  ITodoTextAreaEvent,
+  ITodoInputEvent,
+  ITodoCheckBoxEvent,
+} from '@/types/type'
 import { postTodo } from '@/utils/functions'
 import React, { useState } from 'react'
-interface TodoInputEvent extends React.FormEvent<HTMLInputElement> {
-  target: HTMLInputElement
-}
-interface TodoTextAreaEvent extends React.FormEvent<HTMLTextAreaElement> {
-  target: HTMLTextAreaElement
-}
+import Link from 'next/link'
+import { Checkbox } from '@material-ui/core'
 
 const TodoList: React.FC<IProps> = (props: IProps) => {
   const initialEditTodo: TodoType = {
-    todo_id: '',
+    todoId: '',
     title: '',
     content: '',
     isDeleted: false,
   }
+  // titleのみ取得でＯＫ
   const [todos, setTodos] = useState([] as TodoListType)
   console.log(props)
 
   const [editTodo, setEditTodo] = useState(initialEditTodo)
-  // useEffect(() => {
-  //   //   TODO try catch
-  //   async function fetchTodos() {
-  //     const getTodos: TodoListType = await get(
-  //       process.env.NEXT_PUBLIC_BASE_API + '/todos',
-  //     )
-  //     setTodos(getTodos)
-  //   }
-  //   fetchTodos()
-  // }, [])
-  const handleInputChange = (event: TodoInputEvent) => {
+
+  const handleTitleChange = (event: ITodoInputEvent) => {
     const name = event.target.name
     const value = event.target.value
     setEditTodo({ ...editTodo, [name]: value })
   }
-  const handleTextAreaChange = (event: TodoTextAreaEvent) => {
+  const handleTextAreaChange = (event: ITodoTextAreaEvent) => {
     const name = event.target.name
     const value = event.target.value
     setEditTodo({ ...editTodo, [name]: value })
   }
+
+  const handleIsDeleteChange = (event: ITodoCheckBoxEvent) => {
+    const name = event.target.name
+    const checked = event.target.checked
+    setEditTodo({ ...editTodo, [name]: checked })
+  }
+
   const putTodo = async (editTodo: TodoType) => {
     try {
       const todoJson = await postTodo(
@@ -64,8 +66,7 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
           name="title"
           placeholder="title"
           value={editTodo.title}
-          data-item={editTodo.title}
-          onChange={event => handleInputChange(event)}
+          onChange={event => handleTitleChange(event)}
           required
         />
         <br />
@@ -77,19 +78,23 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
           onChange={event => handleTextAreaChange(event)}
           required
         />
+        <Checkbox
+          checked={editTodo.isDeleted}
+          onChange={event => handleIsDeleteChange(event)}
+        />
         <br />
       </div>
       <button onClick={() => putTodo(editTodo)} className="btn btn-primary">
-        新規作成・更新
+        新規作成
       </button>
       {props.todoList.map((todo: TodoType) => {
         return (
-          <ul key={todo.todo_id}>
+          <ol key={todo.todoId}>
             {/* title, content, flg, 編集, 削除, 感情 */}
             <li>
-              {todo.title}: {todo.content}
+              <Link href={`/components/${[todo.todoId]}`}>{todo.title}</Link>
             </li>
-          </ul>
+          </ol>
         )
       })}
     </div>
