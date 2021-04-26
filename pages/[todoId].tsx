@@ -30,22 +30,52 @@ const EditTodo = () => {
   const handleIsDeleteChange = (checked: boolean) => {
     setEditState({ ...editState, ['isDeleted']: checked })
   }
+
   return (
-    <div>
-      {todoId}
+    <div className={style.todoForm}>
       <TextField
-        placeholder="title"
+        className={style.todoForm__title}
+        label="タイトル"
+        variant="outlined"
         onChange={event => handleTitleChange(event.target.value)}
       />
       <TextField
-        placeholder="content"
+        className={style.todoForm__content}
+        label="内容"
+        multiline
+        variant="outlined"
         onChange={event => handleContentChange(event.target.value)}
+        rows={5}
+        rowsMax={10}
       />
-      <Checkbox
-        checked={editState.isDeleted}
-        onChange={event => handleIsDeleteChange(event.target.checked)}
+      <FormControlLabel
+        label="削除"
+        control={
+          <Checkbox
+            color="primary"
+            checked={editState.isDeleted}
+            onChange={event => handleIsDeleteChange(event.target.checked)}
+          />
+        }
+        labelPlacement="start"
       />
-      <Button>更新</Button>
+
+      <div>
+        <Button
+          className={style.todoForm__put}
+          variant="contained"
+          color="primary">
+          更新
+        </Button>
+        <Link href="/" passHref>
+          <Button
+            className={style.todoForm__back}
+            variant="contained"
+            color="secondary">
+            もどる
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 }
