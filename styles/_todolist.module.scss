@@ -1,0 +1,10 @@
+.todoList {
+  &__divider {
+    margin: 20px;
+  }
+  &__dataGrid {
+    align-items: center;
+    margin: 20px auto;
+    width: 80%;
+  }
+}
