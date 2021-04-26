@@ -8,12 +8,15 @@ import {
 } from '@/types/type'
 import { postTodo } from '@/utils/functions'
 import React, { useState } from 'react'
-import Link from 'next/link'
-import { Checkbox } from '@material-ui/core'
+import { Checkbox, Divider } from '@material-ui/core'
+import { DataGrid, GridColDef } from '@material-ui/data-grid'
+import router from 'next/router'
+// eslint-disable-next-line no-restricted-imports
+import style from '../styles/_todolist.module.scss'
 
 const TodoList: React.FC<IProps> = (props: IProps) => {
   const initialEditTodo: TodoType = {
-    todoId: '',
+    id: '',
     title: '',
     content: '',
     isDeleted: false,
@@ -56,15 +59,29 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
       return
     }
   }
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'No', width: 100, disableColumnMenu: true },
+    {
+      field: 'title',
+      width: 250,
+      headerName: 'タイトル',
+      disableColumnMenu: true,
+    },
+    {
+      field: 'content',
+      headerName: '内容',
+      width: 430,
+      disableColumnMenu: true,
+    },
+  ]
   return (
     <div>
       <div className="container">
-        {/* TODO: Material-UI */}
         <input
           className="form-control"
           type="text"
           name="title"
-          placeholder="title"
+          placeholder="タイトル"
           value={editTodo.title}
           onChange={event => handleTitleChange(event)}
           required
@@ -73,7 +90,7 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
         <textarea
           className="form-control"
           name="content"
-          placeholder="content"
+          placeholder="内容"
           value={editTodo.content}
           onChange={event => handleTextAreaChange(event)}
           required
@@ -87,16 +104,19 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
       <button onClick={() => putTodo(editTodo)} className="btn btn-primary">
         新規作成
       </button>
-      {props.todoList.map((todo: TodoType) => {
-        return (
-          <ol key={todo.todoId}>
-            {/* title, content, flg, 編集, 削除, 感情 */}
-            <li>
-              <Link href={`/components/${[todo.todoId]}`}>{todo.title}</Link>
-            </li>
-          </ol>
-        )
-      })}
+      <Divider className={style.todoList__divider} />
+      <div className={style.todoList__dataGrid}>
+        <DataGrid
+          rows={props.todoList}
+          columns={columns}
+          pageSize={5}
+          loading={props.todoList.length === 0}
+          onRowClick={row => router.push(`/${row.id}`)}
+          autoHeight={true}
+          columnBuffer={0}
+          hideFooterRowCount
+        />
+      </div>
     </div>
   )
 }
