@@ -8,12 +8,15 @@ import {
 } from '@/types/type'
 import { postTodo } from '@/utils/functions'
 import React, { useState } from 'react'
-import Link from 'next/link'
-import { Checkbox } from '@material-ui/core'
+import { Checkbox, Divider } from '@material-ui/core'
+import { DataGrid, GridColDef } from '@material-ui/data-grid'
+import router from 'next/router'
+// eslint-disable-next-line no-restricted-imports
+import style from '../styles/_todolist.module.scss'
 
 const TodoList: React.FC<IProps> = (props: IProps) => {
   const initialEditTodo: TodoType = {
-    todoId: '',
+    id: '',
     title: '',
     content: '',
     isDeleted: false,

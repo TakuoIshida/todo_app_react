@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import { Button, Checkbox, TextField } from '@material-ui/core'
-import { useRouter } from 'next/router'
 import {
-  IProps,
-  TodoListType,
-  TodoType,
-  ITodoTextAreaEvent,
-  ITodoInputEvent,
-  ITodoCheckBoxEvent,
-} from '@/types/type'
+  Button,
+  Checkbox,
+  TextField,
+  FormControlLabel,
+} from '@material-ui/core'
+import { TodoType } from '@/types/type'
+import Link from 'next/link'
+// eslint-disable-next-line no-restricted-imports
+import style from '../styles/_todo_form.module.scss'
+
 // 各Todoの編集・更新画面
 const EditTodo = () => {
   const initialEditTodo: TodoType = {
