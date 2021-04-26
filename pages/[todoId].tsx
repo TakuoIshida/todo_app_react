@@ -11,10 +11,8 @@ import {
 } from '@/types/type'
 // 各Todoの編集・更新画面
 const EditTodo = () => {
-  const router = useRouter()
-  const { todoId } = router.query
   const initialEditTodo: TodoType = {
-    todoId: '',
+    id: '',
     title: '',
     content: '',
     isDeleted: false,
