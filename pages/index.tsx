@@ -1,21 +1,21 @@
 import TodoList from '@/components/TodoList'
-import { IProps, TodoListType } from '@/types/type'
+import { GetApiResponse, IProps } from '@/types/type'
 import { getTodos } from '@/utils/functions'
 import React from 'react'
 // レンダリングするTopのコンポネントでAPIフェッチする必要がある
 export async function getStaticProps() {
-  const todoList: TodoListType = await getTodos(
+  const data: GetApiResponse = await getTodos(
     process.env.NEXT_PUBLIC_BASE_API + '/todos',
   )
   return {
-    props: { todoList },
+    props: { data },
   }
 }
 
 const TopPage: React.FC<IProps> = (props: IProps) => {
   return (
     <div>
-      <TodoList todoList={props.todoList} />
+      <TodoList data={props.data} />
     </div>
   )
 }

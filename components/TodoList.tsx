@@ -1,15 +1,15 @@
-import { IProps, TodoListType, TodoType } from '@/types/type'
+import { IProps, PutApiResponse, TodoListType, TodoType } from '@/types/type'
 import { postTodo } from '@/utils/functions'
-import React, { useState } from 'react'
 import {
+  Button,
   Checkbox,
   Divider,
-  TextField,
-  Button,
   FormControlLabel,
+  TextField,
 } from '@material-ui/core'
 import { DataGrid, GridColDef } from '@material-ui/data-grid'
 import router from 'next/router'
+import React, { useState } from 'react'
 // eslint-disable-next-line no-restricted-imports
 import style from '../styles/_todolist.module.scss'
 
@@ -40,13 +40,11 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
       // POSTする前にComprehendを入れてレスポンスの点数を受け取る
       // 点数を基に感情を４パターンに分ける
       // ４パターンに分けた結果をnewTodoに追加する
-      const todoJson = await postTodo(
+      const data: PutApiResponse = await postTodo(
         process.env.NEXT_PUBLIC_BASE_API + '/todos',
         newTodo,
       )
-      console.log(todoJson)
-
-      setTodos([todoJson, ...todos])
+      setTodos([...todos, data.result])
       setNewTodo(initialNewTodo)
     } catch (e) {
       console.log(e)
@@ -110,10 +108,10 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
       <Divider className={style.todoList__divider} />
       <div className={style.todoList__dataGrid}>
         <DataGrid
-          rows={props.todoList}
+          rows={props.data.result}
           columns={columns}
           pageSize={5}
-          loading={props.todoList.length === 0}
+          loading={props.data.result.length === 0}
           onRowClick={row => router.push(`/${row.id}`)}
           autoHeight={true}
           columnBuffer={0}

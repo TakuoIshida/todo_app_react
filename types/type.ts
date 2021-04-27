@@ -14,7 +14,7 @@ export type confirmType = {
 export type TodoListType = TodoType[]
 
 export interface IProps {
-  todoList: TodoListType
+  data: GetApiResponse
 }
 
 export interface ITodoInputEvent extends React.FormEvent<HTMLInputElement> {
@@ -28,4 +28,15 @@ export interface ITodoTextAreaEvent
 
 export interface ITodoCheckBoxEvent {
   target: HTMLInputElement
+}
+
+export type GetApiResponse = {
+  status: number
+  message: string
+  result: TodoListType
+}
+export type PutApiResponse = {
+  status: number
+  message: string
+  result: TodoType
 }
