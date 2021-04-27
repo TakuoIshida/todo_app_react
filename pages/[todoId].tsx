@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import BackToTop from '@/components/BackToTop'
+import { TodoType } from '@/types/type'
 import {
   Button,
   Checkbox,
-  TextField,
   FormControlLabel,
+  TextField,
 } from '@material-ui/core'
-import { TodoType } from '@/types/type'
-import Link from 'next/link'
+import React, { useState } from 'react'
 // eslint-disable-next-line no-restricted-imports
 import style from '../styles/_todo_form.module.scss'
 
@@ -68,14 +68,7 @@ const EditTodo = () => {
           color="primary">
           更新
         </Button>
-        <Link href="/" passHref>
-          <Button
-            className={style.todoForm__back}
-            variant="contained"
-            color="secondary">
-            もどる
-          </Button>
-        </Link>
+        <BackToTop />
       </div>
     </div>
   )
