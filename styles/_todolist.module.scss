@@ -1,7 +1,18 @@
-.todoList {
-  &__divider {
-    margin: 20px;
+.todoForm {
+  margin-top: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  &__title {
+    width: 300px;
   }
+  &__content {
+    width: 300px;
+  }
+}
+
+.todoList {
   &__dataGrid {
     align-items: center;
     margin: 20px auto;

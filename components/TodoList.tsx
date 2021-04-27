@@ -1,14 +1,13 @@
-import {
-  IProps,
-  TodoListType,
-  TodoType,
-  ITodoTextAreaEvent,
-  ITodoInputEvent,
-  ITodoCheckBoxEvent,
-} from '@/types/type'
+import { IProps, TodoListType, TodoType } from '@/types/type'
 import { postTodo } from '@/utils/functions'
 import React, { useState } from 'react'
-import { Checkbox, Divider } from '@material-ui/core'
+import {
+  Checkbox,
+  Divider,
+  TextField,
+  Button,
+  FormControlLabel,
+} from '@material-ui/core'
 import { DataGrid, GridColDef } from '@material-ui/data-grid'
 import router from 'next/router'
 // eslint-disable-next-line no-restricted-imports
@@ -27,21 +26,15 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
 
   const [editTodo, setEditTodo] = useState(initialEditTodo)
 
-  const handleTitleChange = (event: ITodoInputEvent) => {
-    const name = event.target.name
-    const value = event.target.value
-    setEditTodo({ ...editTodo, [name]: value })
+  const handleTitleChange = (value: string) => {
+    setEditTodo({ ...editTodo, ['title']: value })
   }
-  const handleTextAreaChange = (event: ITodoTextAreaEvent) => {
-    const name = event.target.name
-    const value = event.target.value
-    setEditTodo({ ...editTodo, [name]: value })
+  const handleContentChange = (value: string) => {
+    setEditTodo({ ...editTodo, ['content']: value })
   }
 
-  const handleIsDeleteChange = (event: ITodoCheckBoxEvent) => {
-    const name = event.target.name
-    const checked = event.target.checked
-    setEditTodo({ ...editTodo, [name]: checked })
+  const handleIsDeleteChange = (checked: boolean) => {
+    setEditTodo({ ...editTodo, ['isDeleted']: checked })
   }
 
   const putTodo = async (editTodo: TodoType) => {
@@ -76,34 +69,43 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
   ]
   return (
     <div>
-      <div className="container">
-        <input
-          className="form-control"
-          type="text"
-          name="title"
-          placeholder="タイトル"
+      <div className={style.todoForm}>
+        <TextField
+          className={style.todoForm__title}
+          label="タイトル"
+          variant="outlined"
           value={editTodo.title}
-          onChange={event => handleTitleChange(event)}
-          required
+          onChange={event => handleTitleChange(event.target.value)}
         />
-        <br />
-        <textarea
-          className="form-control"
-          name="content"
-          placeholder="内容"
+        <TextField
+          className={style.todoForm__content}
+          label="内容"
+          multiline
+          variant="outlined"
           value={editTodo.content}
-          onChange={event => handleTextAreaChange(event)}
-          required
+          onChange={event => handleContentChange(event.target.value)}
+          rows={5}
+          rowsMax={10}
         />
-        <Checkbox
-          checked={editTodo.isDeleted}
-          onChange={event => handleIsDeleteChange(event)}
+        <FormControlLabel
+          label="削除"
+          control={
+            <Checkbox
+              checked={editTodo.isDeleted}
+              onChange={event => handleIsDeleteChange(event.target.checked)}
+            />
+          }
+          labelPlacement="start"
         />
-        <br />
+
+        <Button
+          onClick={() => putTodo(editTodo)}
+          className={style.todoForm__put}
+          variant="contained"
+          color="primary">
+          新規作成
+        </Button>
       </div>
-      <button onClick={() => putTodo(editTodo)} className="btn btn-primary">
-        新規作成
-      </button>
       <Divider className={style.todoList__divider} />
       <div className={style.todoList__dataGrid}>
         <DataGrid
