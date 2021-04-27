@@ -1,6 +1,6 @@
 import BackToTop from '@/components/BackToTop'
 import { PutApiResponse, TodoType } from '@/types/type'
-import { postTodo } from '@/utils/functions'
+import { comprehendApiReq, postTodo } from '@/utils/functions'
 import {
   Button,
   Checkbox,
@@ -33,6 +33,8 @@ const NewTodo = () => {
 
   const putTodo = async (newTodo: TodoType) => {
     try {
+      const res = await comprehendApiReq(newTodo.content)
+      console.log(res)
       // POSTする前にComprehendを入れてレスポンスの点数を受け取る
       // 点数を基に感情を４パターンに分ける
       // ４パターンに分けた結果をnewTodoに追加する
