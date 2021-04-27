@@ -20,6 +20,7 @@ const EditTodo = () => {
   }
   // storeからeditする対象のtodoを取得
   const [editState, setEditState] = useState(initialEditTodo)
+
   const handleTitleChange = (value: string) => {
     setEditState({ ...editState, ['title']: value })
   }

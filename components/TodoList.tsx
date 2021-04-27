@@ -14,7 +14,7 @@ import router from 'next/router'
 import style from '../styles/_todolist.module.scss'
 
 const TodoList: React.FC<IProps> = (props: IProps) => {
-  const initialEditTodo: TodoType = {
+  const initialNewTodo: TodoType = {
     id: '',
     title: '',
     content: '',
@@ -22,31 +22,32 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
   }
   // titleのみ取得でＯＫ
   const [todos, setTodos] = useState([] as TodoListType)
-  console.log(props)
-
-  const [editTodo, setEditTodo] = useState(initialEditTodo)
+  const [newTodo, setNewTodo] = useState(initialNewTodo)
 
   const handleTitleChange = (value: string) => {
-    setEditTodo({ ...editTodo, ['title']: value })
+    setNewTodo({ ...newTodo, ['title']: value })
   }
   const handleContentChange = (value: string) => {
-    setEditTodo({ ...editTodo, ['content']: value })
+    setNewTodo({ ...newTodo, ['content']: value })
   }
 
   const handleIsDeleteChange = (checked: boolean) => {
-    setEditTodo({ ...editTodo, ['isDeleted']: checked })
+    setNewTodo({ ...newTodo, ['isDeleted']: checked })
   }
 
-  const putTodo = async (editTodo: TodoType) => {
+  const putTodo = async (newTodo: TodoType) => {
     try {
+      // POSTする前にComprehendを入れてレスポンスの点数を受け取る
+      // 点数を基に感情を４パターンに分ける
+      // ４パターンに分けた結果をnewTodoに追加する
       const todoJson = await postTodo(
         process.env.NEXT_PUBLIC_BASE_API + '/todos',
-        editTodo,
+        newTodo,
       )
       console.log(todoJson)
 
       setTodos([todoJson, ...todos])
-      setEditTodo(initialEditTodo)
+      setNewTodo(initialNewTodo)
     } catch (e) {
       console.log(e)
       return
@@ -74,7 +75,7 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
           className={style.todoForm__title}
           label="タイトル"
           variant="outlined"
-          value={editTodo.title}
+          value={newTodo.title}
           onChange={event => handleTitleChange(event.target.value)}
         />
         <TextField
@@ -82,7 +83,7 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
           label="内容"
           multiline
           variant="outlined"
-          value={editTodo.content}
+          value={newTodo.content}
           onChange={event => handleContentChange(event.target.value)}
           rows={5}
           rowsMax={10}
@@ -91,7 +92,7 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
           label="削除"
           control={
             <Checkbox
-              checked={editTodo.isDeleted}
+              checked={newTodo.isDeleted}
               onChange={event => handleIsDeleteChange(event.target.checked)}
             />
           }
@@ -99,7 +100,7 @@ const TodoList: React.FC<IProps> = (props: IProps) => {
         />
 
         <Button
-          onClick={() => putTodo(editTodo)}
+          onClick={() => putTodo(newTodo)}
           className={style.todoForm__put}
           variant="contained"
           color="primary">
